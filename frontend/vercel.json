@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://mini-social-media-zn7h.onrender.com/api/$1"
+    }
+  ]
+}
