@@ -4,6 +4,18 @@
     {
       "source": "/api/:path*",
       "destination": "https://mini-social-media-zn7h.onrender.com/api/:path*"
+    },
+    {
+      "source": "/register",
+      "destination": "/register.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/login.html"
+    },
+    {
+      "source": "/profile",
+      "destination": "/profile.html"
     }
   ]
 }
