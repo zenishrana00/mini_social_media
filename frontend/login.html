@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Mini Social Media Platform</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/" class="brand-logo">MiniSocial</a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/login" class="active">Login</a></li>
+          <li><a href="/register">Register</a></li>
+          <li><a href="/profile">Profile</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container" style="max-width: 480px;">
+    <div class="card">
+      <div class="card-header">
+        <h1 class="card-title">Welcome Back</h1>
+        <p class="card-subtitle">Log in to your account to continue</p>
+      </div>
+
+      <!-- Feedback / Alert Message Container -->
+      <div id="alert-box" class="alert"></div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address or Username</label>
+          <input
+            type="text"
+            id="email"
+            name="email"
+            class="form-input"
+            placeholder="you@example.com or username"
+            required
+            autocomplete="username"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-input"
+            placeholder="••••••••"
+            required
+            autocomplete="current-password"
+          >
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
+        Don't have an account? <a href="/register" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">Register here</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Mini Social Media Platform. Built for internship submission.</p>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

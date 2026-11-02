@@ -1,0 +1,2 @@
+# routes/
+# Stores Express router definitions that map URLs to controllers (e.g., authRoutes.js, postRoutes.js)

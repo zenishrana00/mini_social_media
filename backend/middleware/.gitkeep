@@ -1,0 +1,2 @@
+# middleware/
+# Stores custom Express middleware functions (e.g., authMiddleware.js, errorMiddleware.js)

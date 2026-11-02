@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile - Mini Social Media Platform</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/" class="brand-logo">MiniSocial</a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/login">Login</a></li>
+          <li><a href="/register">Register</a></li>
+          <li><a href="/profile" class="active">Profile</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container">
+    <!-- User Search Box -->
+    <div class="search-box-wrapper">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        id="user-search-input"
+        class="search-input"
+        placeholder="Search users by name or @username..."
+        autocomplete="off"
+      >
+      <div id="search-results-list" class="search-results-list"></div>
+    </div>
+
+    <!-- Feedback / Alert Message Container -->
+    <div id="alert-box" class="alert"></div>
+
+    <!-- User Profile Header Card -->
+    <div class="card" id="profile-card">
+      <div style="display: flex; gap: 1.75rem; align-items: flex-start; flex-wrap: wrap;">
+        <!-- Avatar Display -->
+        <div
+          id="profile-avatar"
+          style="width: 90px; height: 90px; border-radius: 50%; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 700; color: #64748b; overflow: hidden; flex-shrink: 0;"
+        >
+          👤
+        </div>
+
+        <!-- User Information -->
+        <div style="flex: 1; min-width: 240px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem;">
+            <div>
+              <h1 style="font-size: 1.5rem; margin-bottom: 0.15rem;" id="profile-name">Loading Profile...</h1>
+              <p style="color: var(--primary-color); font-weight: 600; font-size: 0.95rem; margin-bottom: 0.25rem;" id="profile-username">@loading</p>
+              <p style="color: var(--text-muted); font-size: 0.85rem;" id="profile-email"></p>
+            </div>
+
+            <!-- Context-Aware Actions Container -->
+            <div id="profile-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button id="edit-profile-btn" class="btn btn-outline btn-sm" style="display: none;">✏️ Edit Profile</button>
+              <button id="logout-btn" class="btn btn-danger btn-sm" style="display: none;">Sign Out</button>
+              <button id="follow-btn" class="btn btn-primary btn-sm" style="display: none;">Follow</button>
+              <a href="/profile" id="back-to-my-profile-btn" class="btn btn-outline btn-sm" style="display: none;">← My Profile</a>
+            </div>
+          </div>
+
+          <!-- Bio -->
+          <p style="color: var(--text-main); font-size: 0.95rem; margin-top: 0.85rem; line-height: 1.5;" id="profile-bio">
+            Fetching user information...
+          </p>
+
+          <!-- Follower & Following Statistics -->
+          <div class="profile-stats">
+            <div class="stat-item stat-clickable" id="followers-stat-item">
+              <span id="followers-count" class="stat-number">0</span>
+              <span class="stat-label">Followers</span>
+            </div>
+            <div class="stat-item stat-clickable" id="following-stat-item">
+              <span id="following-count" class="stat-number">0</span>
+              <span class="stat-label">Following</span>
+            </div>
+            <span id="profile-joined" style="font-size: 0.82rem; color: var(--text-muted); margin-left: auto;"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Followers / Following User List Panel -->
+    <section id="follow-list-section" class="follow-list-section" style="display: none; margin-top: 1.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 id="follow-list-title" style="font-size: 1.25rem; font-weight: 700;">Followers</h2>
+        <button id="close-follow-list-btn" class="btn btn-outline btn-sm">✕ Close</button>
+      </div>
+      <div id="follow-list-container"></div>
+    </section>
+
+    <!-- User Posts Section -->
+    <section id="user-posts-section" style="margin-top: 1.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 class="card-title" style="font-size: 1.25rem;" id="posts-card-title">Posts</h2>
+        <span id="user-posts-count-badge" class="phase-pill">0 Posts</span>
+      </div>
+
+      <!-- Container where user posts are rendered -->
+      <div id="user-posts-container">
+        <div class="feed-empty-state">
+          <p>Loading posts...</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Edit Post Modal Dialog -->
+  <div id="edit-post-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="edit-post-title">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title" id="edit-post-title">Edit Post</h3>
+        <button type="button" class="modal-close" id="edit-post-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+
+      <form id="edit-post-form">
+        <div class="modal-body">
+          <div id="edit-post-alert" class="alert"></div>
+
+          <div class="form-group">
+            <label for="edit-post-content" class="form-label">Post Content *</label>
+            <textarea
+              id="edit-post-content"
+              class="form-textarea"
+              rows="4"
+              maxlength="1000"
+              required
+            ></textarea>
+            <div style="text-align: right; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
+              <span id="edit-post-char-count">0</span> / 1000
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-post-image" class="form-label">Image URL (Optional)</label>
+            <input
+              type="url"
+              id="edit-post-image"
+              class="form-input"
+              placeholder="https://images.unsplash.com/..."
+            >
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="edit-post-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="save-post-btn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Post Confirmation Modal Dialog -->
+  <div id="delete-post-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
+    <div class="modal-container" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="delete-modal-title">Delete Post</h3>
+        <button type="button" class="modal-close" id="delete-post-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to permanently delete this post? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" id="cancel-delete-post-btn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirm-delete-post-btn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal Dialog -->
+  <div id="edit-profile-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Edit Profile</h3>
+        <button type="button" class="modal-close" id="modal-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+
+      <form id="edit-profile-form">
+        <div class="modal-body">
+          <div id="modal-alert-box" class="alert"></div>
+
+          <div class="form-group">
+            <label for="edit-name" class="form-label">Full Name *</label>
+            <input
+              type="text"
+              id="edit-name"
+              name="name"
+              class="form-input"
+              maxlength="50"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="edit-username" class="form-label">Username *</label>
+            <input
+              type="text"
+              id="edit-username"
+              name="username"
+              class="form-input"
+              maxlength="30"
+              required
+            >
+            <small style="color: var(--text-muted); font-size: 0.8rem;">Letters, numbers, and underscores only (3-30 chars).</small>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-profile-picture" class="form-label">Profile Picture URL</label>
+            <input
+              type="url"
+              id="edit-profile-picture"
+              name="profilePicture"
+              class="form-input"
+              placeholder="https://example.com/avatar.jpg"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="edit-bio" class="form-label">Bio (Max 250 characters)</label>
+            <textarea
+              id="edit-bio"
+              name="bio"
+              class="form-textarea"
+              rows="3"
+              maxlength="250"
+              placeholder="Tell others a little about yourself..."
+            ></textarea>
+            <div style="text-align: right; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
+              <span id="bio-char-count">0</span> / 250
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="modal-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="save-profile-btn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Mini Social Media Platform. Built for internship submission.</p>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

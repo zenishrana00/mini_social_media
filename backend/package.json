@@ -1,0 +1,40 @@
+{
+  "name": "mini-social-media-platform-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Mini Social Media Platform",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "dev:watch": "node --watch server.js",
+    "test": "node tests/test_auth_flow.js && node tests/test_profile_flow.js && node tests/test_post_flow.js && node tests/test_comment_flow.js && node tests/test_like_flow.js && node tests/test_follow_flow.js",
+    "test:auth": "node tests/test_auth_flow.js",
+    "test:profile": "node tests/test_profile_flow.js",
+    "test:posts": "node tests/test_post_flow.js",
+    "test:comments": "node tests/test_comment_flow.js",
+    "test:likes": "node tests/test_like_flow.js",
+    "test:follow": "node tests/test_follow_flow.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongodb",
+    "mongoose",
+    "social-media"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^8.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

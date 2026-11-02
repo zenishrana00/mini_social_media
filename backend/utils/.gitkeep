@@ -1,0 +1,2 @@
+# utils/
+# Stores reusable helper functions, token generators, and validators (e.g., generateToken.js)

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Social Media Platform - Home</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="/" class="brand-logo">MiniSocial</a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/" class="active">Home</a></li>
+          <li><a href="/login">Login</a></li>
+          <li><a href="/register">Register</a></li>
+          <li><a href="/profile">Profile</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container">
+    <!-- User Search Box -->
+    <div class="search-box-wrapper">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        id="user-search-input"
+        class="search-input"
+        placeholder="Find users on MiniSocial (e.g. alex, bob)..."
+        autocomplete="off"
+      >
+      <div id="search-results-list" class="search-results-list"></div>
+    </div>
+
+    <!-- Feedback / Global Notification Alert -->
+    <div id="alert-box" class="alert"></div>
+
+    <!-- Guest Welcome Card (Shown when not logged in) -->
+    <div class="card" id="guest-welcome-card" style="display: none;">
+      <div class="card-header">
+        <h1 class="card-title">Welcome to Mini Social Media Platform</h1>
+        <p class="card-subtitle">An internship project built with Node.js, Express, MongoDB, and vanilla JavaScript.</p>
+      </div>
+
+      <div style="margin: 1.5rem 0;">
+        <p style="margin-bottom: 1rem;">
+          Connect with peers, share updates with image attachments, and discover community profiles. Sign in or register to join the home feed!
+        </p>
+
+        <!-- Live Health Status Indicator -->
+        <div style="display: flex; align-items: center; gap: 1rem; margin-top: 1.5rem;">
+          <strong>API Status:</strong>
+          <span id="api-health-status">
+            <span class="status-badge" style="background-color: #f1f5f9; color: #475569; border-color: #cbd5e1;">
+              Checking connection...
+            </span>
+          </span>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+        <a href="/login" class="btn btn-primary">Sign In</a>
+        <a href="/register" class="btn btn-outline">Create Account</a>
+      </div>
+    </div>
+
+    <!-- Create Post Card (Shown when logged in) -->
+    <div class="create-post-card" id="create-post-card" style="display: none;">
+      <h2 class="create-post-header">Create a Post</h2>
+      <div id="create-post-alert" class="alert"></div>
+
+      <form id="create-post-form">
+        <div class="form-group">
+          <textarea
+            id="post-content-input"
+            class="form-textarea"
+            rows="3"
+            maxlength="1000"
+            placeholder="What's on your mind? Share an update with the community..."
+            required
+          ></textarea>
+          <div style="text-align: right; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
+            <span id="post-char-count">0</span> / 1000
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input
+            type="url"
+            id="post-image-input"
+            class="form-input"
+            placeholder="Optional image URL (e.g. https://images.unsplash.com/...)"
+          >
+        </div>
+
+        <div style="display: flex; justify-content: flex-end;">
+          <button type="submit" id="submit-post-btn" class="btn btn-primary">Publish Post</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Home Feed Container -->
+    <section id="feed-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+        <div class="feed-tabs" id="feed-tabs" style="display: none;">
+          <button type="button" id="tab-community-feed" class="feed-tab-btn active">🌐 Community Feed</button>
+          <button type="button" id="tab-following-feed" class="feed-tab-btn">👥 Following Feed</button>
+        </div>
+        <h2 id="feed-title-text" style="font-size: 1.35rem; font-weight: 700;">Community Feed</h2>
+        <span id="feed-refresh-indicator" style="font-size: 0.85rem; color: var(--text-muted);"></span>
+      </div>
+
+      <!-- Feed Posts List -->
+      <div id="feed-posts-container">
+        <div class="feed-empty-state">
+          <p>Loading posts...</p>
+        </div>
+      </div>
+
+      <!-- Pagination / Load More Button -->
+      <div class="feed-load-more-container">
+        <button id="load-more-posts-btn" class="btn btn-outline" style="display: none;">Load More Posts</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Edit Post Modal Dialog -->
+  <div id="edit-post-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="edit-post-title">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title" id="edit-post-title">Edit Post</h3>
+        <button type="button" class="modal-close" id="edit-post-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+
+      <form id="edit-post-form">
+        <div class="modal-body">
+          <div id="edit-post-alert" class="alert"></div>
+
+          <div class="form-group">
+            <label for="edit-post-content" class="form-label">Post Content *</label>
+            <textarea
+              id="edit-post-content"
+              class="form-textarea"
+              rows="4"
+              maxlength="1000"
+              required
+            ></textarea>
+            <div style="text-align: right; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
+              <span id="edit-post-char-count">0</span> / 1000
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-post-image" class="form-label">Image URL (Optional)</label>
+            <input
+              type="url"
+              id="edit-post-image"
+              class="form-input"
+              placeholder="https://images.unsplash.com/..."
+            >
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="edit-post-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="save-post-btn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Post Confirmation Modal Dialog -->
+  <div id="delete-post-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
+    <div class="modal-container" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="delete-modal-title">Delete Post</h3>
+        <button type="button" class="modal-close" id="delete-post-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to permanently delete this post? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" id="cancel-delete-post-btn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirm-delete-post-btn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Mini Social Media Platform. Built for internship submission.</p>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

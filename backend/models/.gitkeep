@@ -1,0 +1,2 @@
+# models/
+# Stores Mongoose data schemas and models (e.g., User.js, Post.js, Comment.js)
